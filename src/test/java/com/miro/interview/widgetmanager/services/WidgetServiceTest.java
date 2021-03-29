@@ -126,4 +126,18 @@ class WidgetServiceTest {
     assertEquals(2, receivedWidgets.size());
     assertEquals(widgets, receivedWidgets);
   }
+
+  @Test
+  void testFindAllWithPropagationIncorrectPageNumber() {
+    Integer pageNumber = -1;
+    Integer pageSize = 2;
+    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAll(pageNumber, pageSize);});
+  }
+
+  @Test
+  void testFindAllWithPropagationIncorrectPageSize() {
+    Integer pageNumber = 1;
+    Integer pageSize = 2000;
+    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAll(pageNumber, pageSize);});
+  }
 }

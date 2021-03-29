@@ -5,6 +5,7 @@ import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundExceptio
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 public class WidgetService {
 
   private final IWidgetRepository widgetRepository;
+
+  @Value("${pagination.page.size.max}")
+  private Integer pageMaxSize;
 
   @Autowired
   public WidgetService(IWidgetRepository widgetRepository) {
@@ -29,6 +33,9 @@ public class WidgetService {
   }
 
   public List<Widget> findAll(Integer pageNumber, Integer pageSize){
+    if (pageNumber < 0 || pageSize <=0 || pageSize > this.pageMaxSize){
+      throw new IllegalArgumentException("incorrect pagination values");
+    }
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return widgetRepository.findAll(pageable);
   }
