@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
     produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class WidgetController {
+
+  private static final String DEFAULT_PAGE_SIZE = "10";
 
   private final WidgetService widgetService;
 
@@ -37,9 +40,12 @@ public class WidgetController {
   }
 
   @GetMapping()
-  public Collection<Widget> getAll() {
-    return widgetService.findAll();
+  public Collection<Widget> getAll(@RequestParam Integer pageNumber,
+                                   @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
+    return widgetService.findAll(pageNumber, pageSize);
   }
+
+
 
 
   @PostMapping

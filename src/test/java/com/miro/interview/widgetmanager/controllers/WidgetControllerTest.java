@@ -20,6 +20,7 @@ import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -71,14 +72,15 @@ class WidgetControllerTest {
   void getAll() throws Exception{
     Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
     Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
-
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
 
     Mockito
-        .when(widgetService.findAll())
+        .when(widgetService.findAll(any(Integer.class), any(Integer.class)))
         .thenReturn(widgets);
 
-    MvcResult result = mvc.perform(get("/widgets"))
+    MvcResult result = mvc.perform(get("/widgets")
+                                       .param("pageNumber", "0")
+                                       .param("pageSize", "2"))
                            .andExpect(status().isOk())
                            .andReturn();
 

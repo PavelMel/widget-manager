@@ -14,7 +14,9 @@ import java.util.TreeMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
@@ -70,6 +72,14 @@ public class InMemoryWidgetRepository implements IWidgetRepository {
     } finally {
       readLock.unlock();
     }
+  }
+
+  @Override
+  public List<Widget> findAll(Pageable pageable) {
+    return zIndexStorage.values().stream()
+                                  .skip(pageable.getOffset())
+                                  .limit(pageable.getPageSize())
+                                .collect(Collectors.toList());
   }
 
   @Override

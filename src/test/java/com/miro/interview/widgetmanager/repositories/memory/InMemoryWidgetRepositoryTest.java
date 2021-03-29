@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 public class InMemoryWidgetRepositoryTest {
 
@@ -260,4 +262,61 @@ public class InMemoryWidgetRepositoryTest {
     optionalWidget = getWidgetRepository().findById(id);
     assertFalse(optionalWidget.isPresent());
   }
+
+
+  @Test
+  void testFindAllWithPropagation() {
+    Integer pageNumber = 0;
+    Integer pageSize = 2;
+
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<Widget> widgets = getWidgetRepository().findAll(pageable);
+
+    assertNotNull(widgets);
+    assertEquals(2, widgets.size());
+
+    Widget firstWidget = widgets.get(0);
+    assertEquals(1l, firstWidget.getId());
+  }
+
+  @Test
+  void testFindAllWithPropagationFromMiddle() {
+    Integer pageNumber = 1;
+    Integer pageSize = 2;
+
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<Widget> widgets = getWidgetRepository().findAll(pageable);
+
+    assertNotNull(widgets);
+    assertEquals(2, widgets.size());
+
+    Widget firstWidget = widgets.get(0);
+    assertEquals(3l, firstWidget.getId());
+  }
+
+  @Test
+  void testFindAllWithPropagationOutOfRange() {
+    Integer pageNumber = 10;
+    Integer pageSize = 2;
+
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<Widget> widgets = getWidgetRepository().findAll(pageable);
+
+    assertNotNull(widgets);
+    assertEquals(0, widgets.size());
+  }
+
+  @Test
+  void testFindAllWithPropagationWithWholeRange() {
+    Integer pageNumber = 0;
+    Integer pageSize = 10;
+
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    List<Widget> widgets = getWidgetRepository().findAll(pageable);
+
+    assertNotNull(widgets);
+    assertEquals(4, widgets.size());
+  }
+
+
 }

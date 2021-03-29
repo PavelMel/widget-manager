@@ -5,6 +5,8 @@ import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundExceptio
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,11 @@ public class WidgetService {
 
   public List<Widget> findAll(){
     return widgetRepository.findAll();
+  }
+
+  public List<Widget> findAll(Integer pageNumber, Integer pageSize){
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    return widgetRepository.findAll(pageable);
   }
 
   public Widget save(@NonNull Widget widget) throws WidgetNotFoundException {

@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 
 
 @SpringBootTest
@@ -103,5 +104,26 @@ class WidgetServiceTest {
   private long getRandomId(int low, int high){
     Random r = new Random();
     return r.nextInt(high-low) + low;
+  }
+
+  @Test
+  void testFindAllWithPropagation() {
+    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+
+    List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
+
+    Mockito
+        .when(widgetRepository.findAll(any(Pageable.class)))
+        .thenReturn(widgets);
+
+    Integer pageNumber = 0;
+    Integer pageSize = 2;
+
+    List<Widget> receivedWidgets = widgetService.findAll(pageNumber, pageSize);
+
+    assertNotNull(receivedWidgets);
+    assertEquals(2, receivedWidgets.size());
+    assertEquals(widgets, receivedWidgets);
   }
 }

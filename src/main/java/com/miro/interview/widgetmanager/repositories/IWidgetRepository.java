@@ -4,6 +4,7 @@ import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 
 
@@ -14,6 +15,8 @@ public interface IWidgetRepository {
   Optional<Widget> findByZIndex(@NonNull Integer z);
 
   List<Widget> findAll();
+
+  List<Widget> findAll(Pageable pageable);
 
   Widget save(@NonNull Widget widget) throws WidgetNotFoundException;
 
