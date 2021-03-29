@@ -1,5 +1,6 @@
 package com.miro.interview.widgetmanager.services;
 
+import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
@@ -120,7 +121,26 @@ class WidgetServiceTest {
     Integer pageNumber = 0;
     Integer pageSize = 2;
 
-    List<Widget> receivedWidgets = widgetService.findAll(pageNumber, pageSize);
+    List<Widget> receivedWidgets = widgetService.findAllWithPagination(pageNumber, pageSize);
+
+    assertNotNull(receivedWidgets);
+    assertEquals(2, receivedWidgets.size());
+    assertEquals(widgets, receivedWidgets);
+  }
+
+  @Test
+  void testFindAllForDashboard() {
+    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    Dashboard dashboard = new Dashboard(10, 100, 90, 85);
+
+    List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
+
+    Mockito
+        .when(widgetRepository.findAll(any(Dashboard.class)))
+        .thenReturn(widgets);
+
+    List<Widget> receivedWidgets = widgetService.findAllForDashboard(dashboard.getX(), dashboard.getY(), dashboard.getWidth(), dashboard.getHeight());
 
     assertNotNull(receivedWidgets);
     assertEquals(2, receivedWidgets.size());
@@ -131,13 +151,13 @@ class WidgetServiceTest {
   void testFindAllWithPropagationIncorrectPageNumber() {
     Integer pageNumber = -1;
     Integer pageSize = 2;
-    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAll(pageNumber, pageSize);});
+    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAllWithPagination(pageNumber, pageSize);});
   }
 
   @Test
   void testFindAllWithPropagationIncorrectPageSize() {
     Integer pageNumber = 1;
     Integer pageSize = 2000;
-    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAll(pageNumber, pageSize);});
+    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAllWithPagination(pageNumber, pageSize);});
   }
 }

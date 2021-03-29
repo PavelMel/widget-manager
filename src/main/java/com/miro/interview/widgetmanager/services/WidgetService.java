@@ -1,5 +1,6 @@
 package com.miro.interview.widgetmanager.services;
 
+import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
@@ -32,13 +33,20 @@ public class WidgetService {
     return widgetRepository.findAll();
   }
 
-  public List<Widget> findAll(Integer pageNumber, Integer pageSize){
+  public List<Widget> findAllWithPagination(Integer pageNumber, Integer pageSize){
     if (pageNumber < 0 || pageSize <=0 || pageSize > this.pageMaxSize){
       throw new IllegalArgumentException("incorrect pagination values");
     }
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return widgetRepository.findAll(pageable);
   }
+
+  public List<Widget> findAllForDashboard(Integer x, Integer y, Integer width, Integer height){
+    Dashboard dashboard = new Dashboard(x, y, width, height);
+    return widgetRepository.findAll(dashboard);
+  }
+
+
 
   public Widget save(@NonNull Widget widget) throws WidgetNotFoundException {
     return widgetRepository.save(widget);

@@ -1,11 +1,15 @@
 package com.miro.interview.widgetmanager.repositories.db;
 
+import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
+import com.miro.interview.widgetmanager.utils.DashboardUtil;
 import com.miro.interview.widgetmanager.utils.StreamUtils;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
@@ -43,6 +47,13 @@ public class DBWidgetRepository implements IWidgetRepository {
   public List<Widget> findAll(Pageable pageable) {
     Page<Widget> widgetPage = widgetRepository.findAll(pageable);
     return widgetPage.getContent();
+  }
+
+  @Override
+  public List<Widget> findAll(Dashboard dashboard) {
+    return StreamSupport.stream(widgetRepository.findAllByWidthIsLessThanEqualAndHeightIsLessThanEqual(dashboard.getWidth(), dashboard.getHeight()).spliterator(), false)
+                                .filter(item -> DashboardUtil.isWidgetInside(dashboard, item))
+                                .collect(Collectors.toList());
   }
 
   @Transactional

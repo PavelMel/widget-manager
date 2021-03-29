@@ -1,5 +1,6 @@
 package com.miro.interview.widgetmanager.repositories.memory;
 
+import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
@@ -277,6 +278,21 @@ public class InMemoryWidgetRepositoryTest {
 
     Widget firstWidget = widgets.get(0);
     assertEquals(1l, firstWidget.getId());
+  }
+
+  @Test
+  void testFindAllWithDashboard() {
+    Dashboard dashboard = new Dashboard(10, 100, 90, 85);
+
+    List<Widget> widgets = getWidgetRepository().findAll(dashboard);
+    assertNotNull(widgets);
+    assertEquals(2, widgets.size());
+
+    Widget firstWidget = widgets.get(0);
+    assertEquals(2l, firstWidget.getId());
+    Widget secondWidget = widgets.get(1);
+    assertEquals(3l, secondWidget.getId());
+
   }
 
   @Test

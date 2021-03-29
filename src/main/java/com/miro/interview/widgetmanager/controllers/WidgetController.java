@@ -42,10 +42,17 @@ public class WidgetController {
   @GetMapping()
   public Collection<Widget> getAll(@RequestParam Integer pageNumber,
                                    @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
-    return widgetService.findAll(pageNumber, pageSize);
+    return widgetService.findAllWithPagination(pageNumber, pageSize);
   }
 
 
+  @GetMapping("/dashboard")
+  public Collection<Widget> getAllForDashboard(@RequestParam Integer x,
+                                               @RequestParam Integer y,
+                                               @RequestParam Integer width,
+                                               @RequestParam Integer height) {
+    return widgetService.findAllForDashboard(x, y, width, height);
+  }
 
 
   @PostMapping

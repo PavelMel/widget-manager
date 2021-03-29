@@ -1,13 +1,11 @@
 package com.miro.interview.widgetmanager.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miro.interview.widgetmanager.controllers.models.ErrorResponse;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.services.WidgetService;
-import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -20,11 +18,9 @@ import static org.mockito.Mockito.verify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,12 +71,48 @@ class WidgetControllerTest {
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
 
     Mockito
-        .when(widgetService.findAll(any(Integer.class), any(Integer.class)))
+        .when(widgetService.findAllWithPagination(any(Integer.class), any(Integer.class)))
         .thenReturn(widgets);
 
     MvcResult result = mvc.perform(get("/widgets")
                                        .param("pageNumber", "0")
                                        .param("pageSize", "2"))
+                           .andExpect(status().isOk())
+                           .andReturn();
+
+    String content = result.getResponse().getContentAsString();
+    List<Widget> receivedWidgets = objectMapper.readValue(content, new TypeReference<List<Widget>>() {});
+
+    assertNotNull(receivedWidgets);
+    assertEquals(2, receivedWidgets.size());
+
+    Widget firstReceivedWidget = receivedWidgets.get(0);
+    assertNotNull(firstReceivedWidget);
+    assertNotNull(firstReceivedWidget.getId());
+    assertNotNull(firstReceivedWidget.getX());
+    assertNotNull(firstReceivedWidget.getY());
+    assertNotNull(firstReceivedWidget.getZ());
+    assertNotNull(firstReceivedWidget.getHeight());
+    assertNotNull(firstReceivedWidget.getWidth());
+    assertNotNull(firstReceivedWidget.getLastModificationDate());
+
+  }
+
+  @Test
+  void getAllForDashboard() throws Exception{
+    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
+
+    Mockito
+        .when(widgetService.findAllForDashboard(any(Integer.class), any(Integer.class), any(Integer.class), any(Integer.class)))
+        .thenReturn(widgets);
+
+    MvcResult result = mvc.perform(get("/widgets/dashboard")
+                                       .param("x", "10")
+                                       .param("y", "100")
+                                       .param("width", "90")
+                                       .param("height", "85"))
                            .andExpect(status().isOk())
                            .andReturn();
 

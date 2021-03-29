@@ -1,5 +1,6 @@
 package com.miro.interview.widgetmanager.repositories;
 
+import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import java.util.List;
@@ -17,6 +18,8 @@ public interface IWidgetRepository {
   List<Widget> findAll();
 
   List<Widget> findAll(Pageable pageable);
+
+  List<Widget> findAll(Dashboard dashboard);
 
   Widget save(@NonNull Widget widget) throws WidgetNotFoundException;
 

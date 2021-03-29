@@ -1,8 +1,10 @@
 package com.miro.interview.widgetmanager.repositories.memory;
 
+import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.repositories.IWidgetRepository;
+import com.miro.interview.widgetmanager.utils.DashboardUtil;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,6 +85,13 @@ public class InMemoryWidgetRepository implements IWidgetRepository {
   }
 
   @Override
+  public List<Widget> findAll(Dashboard dashboard) {
+    return zIndexStorage.values().stream()
+               .filter(item -> DashboardUtil.isWidgetInside(dashboard, item))
+               .collect(Collectors.toList());
+  }
+
+  @Override
   public Widget save(@NonNull Widget widget) throws WidgetNotFoundException {
     writeLock.lock();
     try {
@@ -156,4 +165,7 @@ public class InMemoryWidgetRepository implements IWidgetRepository {
     widgetStorage.clear();
     zIndexStorage.clear();
   }
+
+
+
 }

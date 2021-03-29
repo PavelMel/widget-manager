@@ -14,7 +14,7 @@ public interface CRUDWidgetRepository  extends PagingAndSortingRepository<Widget
 
   Optional<Widget> findByZ(Integer z);
 
-  List<Widget> findAllByZ(Integer z);
-
   List<Widget> findAllByZGreaterThanEqual(Integer z);
+
+  List<Widget> findAllByWidthIsLessThanEqualAndHeightIsLessThanEqual(Integer width, Integer height);
 }
