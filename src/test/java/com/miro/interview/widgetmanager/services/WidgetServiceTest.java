@@ -32,7 +32,7 @@ class WidgetServiceTest {
 
   @Test
   void findById() throws WidgetNotFoundException {
-    Long id = 1l;
+    Long id = 1L;
     Widget widget = new Widget(id, 100, 150, 2, 30, 50, ZonedDateTime.now());
     Mockito
         .when(widgetRepository.findById(id))
@@ -44,19 +44,19 @@ class WidgetServiceTest {
   }
 
   @Test
-  void findByIdWithException() throws WidgetNotFoundException {
-    Long id = 1l;
+  void findByIdWithException() {
+    Long id = 1L;
     Mockito
         .when(widgetRepository.findById(id))
         .thenReturn(Optional.ofNullable(null));
 
-    assertThrows(WidgetNotFoundException.class, () -> {widgetService.findById(id);});
+    assertThrows(WidgetNotFoundException.class, () -> widgetService.findById(id));
   }
 
   @Test
   void findAll() {
-    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
-    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    Widget firstWidget = new Widget(1L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2L, 70, 80, 2, 10, 20, ZonedDateTime.now());
 
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
     Mockito
@@ -90,13 +90,13 @@ class WidgetServiceTest {
         .when(widgetRepository.save(any(Widget.class)))
         .thenThrow(WidgetNotFoundException.class);
 
-    Widget widget = new Widget(50l, 100, 150, 1, 30, 50, ZonedDateTime.now());
-    assertThrows(WidgetNotFoundException.class, () -> {widgetService.save(widget);});
+    Widget widget = new Widget(50L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    assertThrows(WidgetNotFoundException.class, () -> widgetService.save(widget));
   }
 
   @Test
   void delete() {
-    Long id = 1l;
+    Long id = 1L;
 
     widgetService.delete(id);
     verify(widgetRepository, times(1)).delete(any(Long.class));
@@ -109,8 +109,8 @@ class WidgetServiceTest {
 
   @Test
   void testFindAllWithPropagation() {
-    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
-    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    Widget firstWidget = new Widget(1L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2L, 70, 80, 2, 10, 20, ZonedDateTime.now());
 
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
 
@@ -130,8 +130,8 @@ class WidgetServiceTest {
 
   @Test
   void testFindAllForDashboard() {
-    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
-    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    Widget firstWidget = new Widget(1L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2L, 70, 80, 2, 10, 20, ZonedDateTime.now());
     Dashboard dashboard = new Dashboard(10, 100, 90, 85);
 
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
@@ -151,13 +151,13 @@ class WidgetServiceTest {
   void testFindAllWithPropagationIncorrectPageNumber() {
     Integer pageNumber = -1;
     Integer pageSize = 2;
-    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAllWithPagination(pageNumber, pageSize);});
+    assertThrows(IllegalArgumentException.class, () -> widgetService.findAllWithPagination(pageNumber, pageSize));
   }
 
   @Test
   void testFindAllWithPropagationIncorrectPageSize() {
     Integer pageNumber = 1;
     Integer pageSize = 2000;
-    assertThrows(IllegalArgumentException.class, () -> {widgetService.findAllWithPagination(pageNumber, pageSize);});
+    assertThrows(IllegalArgumentException.class, () -> widgetService.findAllWithPagination(pageNumber, pageSize));
   }
 }

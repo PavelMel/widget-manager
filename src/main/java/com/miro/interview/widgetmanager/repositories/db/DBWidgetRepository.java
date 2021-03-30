@@ -9,7 +9,6 @@ import com.miro.interview.widgetmanager.utils.StreamUtils;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
@@ -51,7 +50,7 @@ public class DBWidgetRepository implements IWidgetRepository {
 
   @Override
   public List<Widget> findAll(Dashboard dashboard) {
-    return StreamSupport.stream(widgetRepository.findAllByWidthIsLessThanEqualAndHeightIsLessThanEqual(dashboard.getWidth(), dashboard.getHeight()).spliterator(), false)
+    return widgetRepository.findAllByWidthIsLessThanEqualAndHeightIsLessThanEqual(dashboard.getWidth(), dashboard.getHeight()).stream()
                                 .filter(item -> DashboardUtil.isWidgetInside(dashboard, item))
                                 .collect(Collectors.toList());
   }
@@ -66,14 +65,12 @@ public class DBWidgetRepository implements IWidgetRepository {
     }
   }
 
-  @Transactional
-  protected Widget add(Widget widget){
+  private Widget add(Widget widget){
     shiftZIndex(widget);
     return widgetRepository.save(widget);
   }
 
-  @Transactional
-  protected Widget update(Widget widget) throws WidgetNotFoundException {
+  private Widget update(Widget widget) throws WidgetNotFoundException {
     Optional<Widget> optionalSavedWidget = widgetRepository.findById(widget.getId());
     Widget savedWidget = optionalSavedWidget.orElseThrow(WidgetNotFoundException::new);
     shiftZIndex(widget);
@@ -81,8 +78,7 @@ public class DBWidgetRepository implements IWidgetRepository {
     return widgetRepository.save(savedWidget);
   }
 
-  @Transactional
-  protected void shiftZIndex(Widget widget){
+  private void shiftZIndex(Widget widget){
     Optional<Widget> optionalExistsWidgetWithZIndex = widgetRepository.findByZ(widget.getZ());
     if (optionalExistsWidgetWithZIndex.isPresent()){
       List<Widget> widgetsToShiftZIndex = widgetRepository.findAllByZGreaterThanEqual(widget.getZ());

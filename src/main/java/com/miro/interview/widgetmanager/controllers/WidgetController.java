@@ -40,8 +40,13 @@ public class WidgetController {
   }
 
   @GetMapping()
-  public Collection<Widget> getAll(@RequestParam Integer pageNumber,
-                                   @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
+  public Collection<Widget> getAll() {
+    return widgetService.findAll();
+  }
+
+  @GetMapping("/page")
+  public Collection<Widget> getAllByPage(@RequestParam Integer pageNumber,
+                                         @RequestParam(required = false, defaultValue = DEFAULT_PAGE_SIZE) Integer pageSize) {
     return widgetService.findAllWithPagination(pageNumber, pageSize);
   }
 

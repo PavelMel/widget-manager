@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 
 public class InMemoryWidgetRepositoryTest {
 
-  private InMemoryWidgetRepository widgetRepository = new InMemoryWidgetRepository();
+  private final InMemoryWidgetRepository widgetRepository = new InMemoryWidgetRepository();
 
   protected Widget firstWidget = new Widget(null, 100, 150, 1, 30, 50, ZonedDateTime.now());
   protected Widget secondWidget = new Widget(null, 70, 80, 2, 10, 20, ZonedDateTime.now());
@@ -58,7 +58,7 @@ public class InMemoryWidgetRepositoryTest {
 
   @Test
   void findById() {
-    Long id = 1l;
+    Long id = 1L;
     Optional<Widget> optionalWidget = getWidgetRepository().findById(id);
     assertTrue(optionalWidget.isPresent());
 
@@ -75,7 +75,7 @@ public class InMemoryWidgetRepositoryTest {
 
   @Test
   void findByIdWithWrongId() {
-    Long id = 50l;
+    Long id = 50L;
     Optional<Widget> optionalWidget = getWidgetRepository().findById(id);
     assertFalse(optionalWidget.isPresent());
   }
@@ -119,7 +119,7 @@ public class InMemoryWidgetRepositoryTest {
 
     assertNotNull(newWidget);
     assertNotNull(newWidget.getId());
-    assertEquals(5l, newWidget.getId());
+    assertEquals(5L, newWidget.getId());
     assertEquals(89, newWidget.getX());
     assertEquals(45, newWidget.getY());
     assertEquals(6, newWidget.getZ());
@@ -150,7 +150,7 @@ public class InMemoryWidgetRepositoryTest {
 
     assertNotNull(newWidget);
     assertNotNull(newWidget.getId());
-    assertEquals(5l, newWidget.getId());
+    assertEquals(5L, newWidget.getId());
     assertEquals(89, newWidget.getX());
     assertEquals(45, newWidget.getY());
     assertEquals(4, newWidget.getZ());
@@ -182,7 +182,7 @@ public class InMemoryWidgetRepositoryTest {
 
     assertNotNull(newWidget);
     assertNotNull(newWidget.getId());
-    assertEquals(5l, newWidget.getId());
+    assertEquals(5L, newWidget.getId());
     assertEquals(89, newWidget.getX());
     assertEquals(45, newWidget.getY());
     assertEquals(2, newWidget.getZ());
@@ -213,12 +213,12 @@ public class InMemoryWidgetRepositoryTest {
 
   @Test
   void updateWithShift() throws WidgetNotFoundException {
-    Widget existsWidget = new Widget(1l, 89, 45, 3, 50, 10, ZonedDateTime.now());
+    Widget existsWidget = new Widget(1L, 89, 45, 3, 50, 10, ZonedDateTime.now());
     existsWidget = getWidgetRepository().save(existsWidget);
 
     assertNotNull(existsWidget);
     assertNotNull(existsWidget.getId());
-    assertEquals(1l, existsWidget.getId());
+    assertEquals(1L, existsWidget.getId());
     assertEquals(89, existsWidget.getX());
     assertEquals(45, existsWidget.getY());
     assertEquals(3, existsWidget.getZ());
@@ -248,13 +248,13 @@ public class InMemoryWidgetRepositoryTest {
 
   @Test
   void updateWithException() {
-    Widget wrongWidget = new Widget(70l, 89, 45, 2, 50, 10, ZonedDateTime.now());
-    assertThrows(WidgetNotFoundException.class, () -> {getWidgetRepository().save(wrongWidget);});
+    Widget wrongWidget = new Widget(70L, 89, 45, 2, 50, 10, ZonedDateTime.now());
+    assertThrows(WidgetNotFoundException.class, () -> getWidgetRepository().save(wrongWidget));
   }
 
   @Test
   void delete() {
-    Long id = 1l;
+    Long id = 1L;
     Optional<Widget> optionalWidget = getWidgetRepository().findById(id);
     assertTrue(optionalWidget.isPresent());
 
@@ -277,7 +277,7 @@ public class InMemoryWidgetRepositoryTest {
     assertEquals(2, widgets.size());
 
     Widget firstWidget = widgets.get(0);
-    assertEquals(1l, firstWidget.getId());
+    assertEquals(1L, firstWidget.getId());
   }
 
   @Test
@@ -289,9 +289,9 @@ public class InMemoryWidgetRepositoryTest {
     assertEquals(2, widgets.size());
 
     Widget firstWidget = widgets.get(0);
-    assertEquals(2l, firstWidget.getId());
+    assertEquals(2L, firstWidget.getId());
     Widget secondWidget = widgets.get(1);
-    assertEquals(3l, secondWidget.getId());
+    assertEquals(3L, secondWidget.getId());
 
   }
 
@@ -307,7 +307,7 @@ public class InMemoryWidgetRepositoryTest {
     assertEquals(2, widgets.size());
 
     Widget firstWidget = widgets.get(0);
-    assertEquals(3l, firstWidget.getId());
+    assertEquals(3L, firstWidget.getId());
   }
 
   @Test

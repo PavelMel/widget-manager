@@ -42,7 +42,7 @@ public class InMemoryWidgetRepository implements IWidgetRepository {
     this.readLock = readWriteLock.readLock();
     this.writeLock = readWriteLock.writeLock();
 
-    this.maxWidgetId = 0l;
+    this.maxWidgetId = 0L;
   }
 
 

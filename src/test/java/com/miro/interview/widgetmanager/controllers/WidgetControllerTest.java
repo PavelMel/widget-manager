@@ -40,8 +40,8 @@ class WidgetControllerTest {
 
   @Test
   void findById() throws Exception {
-    Long id = 1l;
-    Widget createdWidget = new Widget(1l, 100, 150, 2, 30, 50, ZonedDateTime.now());
+    Long id = 1L;
+    Widget createdWidget = new Widget(1L, 100, 150, 2, 30, 50, ZonedDateTime.now());
 
     Mockito
         .when(widgetService.findById(id))
@@ -66,15 +66,47 @@ class WidgetControllerTest {
 
   @Test
   void getAll() throws Exception{
-    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
-    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    Widget firstWidget = new Widget(1L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2L, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
+
+    Mockito
+        .when(widgetService.findAll())
+        .thenReturn(widgets);
+
+    MvcResult result = mvc.perform(get("/widgets"))
+                           .andExpect(status().isOk())
+                           .andReturn();
+
+    String content = result.getResponse().getContentAsString();
+    List<Widget> receivedWidgets = objectMapper.readValue(content, new TypeReference<List<Widget>>() {});
+
+    assertNotNull(receivedWidgets);
+    assertEquals(2, receivedWidgets.size());
+
+    Widget firstReceivedWidget = receivedWidgets.get(0);
+    assertNotNull(firstReceivedWidget);
+    assertNotNull(firstReceivedWidget.getId());
+    assertNotNull(firstReceivedWidget.getX());
+    assertNotNull(firstReceivedWidget.getY());
+    assertNotNull(firstReceivedWidget.getZ());
+    assertNotNull(firstReceivedWidget.getHeight());
+    assertNotNull(firstReceivedWidget.getWidth());
+    assertNotNull(firstReceivedWidget.getLastModificationDate());
+
+  }
+
+  @Test
+  void getAllByPage() throws Exception{
+    Widget firstWidget = new Widget(1L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2L, 70, 80, 2, 10, 20, ZonedDateTime.now());
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
 
     Mockito
         .when(widgetService.findAllWithPagination(any(Integer.class), any(Integer.class)))
         .thenReturn(widgets);
 
-    MvcResult result = mvc.perform(get("/widgets")
+    MvcResult result = mvc.perform(get("/widgets/page")
                                        .param("pageNumber", "0")
                                        .param("pageSize", "2"))
                            .andExpect(status().isOk())
@@ -100,8 +132,8 @@ class WidgetControllerTest {
 
   @Test
   void getAllForDashboard() throws Exception{
-    Widget firstWidget = new Widget(1l, 100, 150, 1, 30, 50, ZonedDateTime.now());
-    Widget secondWidget = new Widget(2l, 70, 80, 2, 10, 20, ZonedDateTime.now());
+    Widget firstWidget = new Widget(1L, 100, 150, 1, 30, 50, ZonedDateTime.now());
+    Widget secondWidget = new Widget(2L, 70, 80, 2, 10, 20, ZonedDateTime.now());
     List<Widget> widgets = Arrays.asList(firstWidget, secondWidget);
 
     Mockito
@@ -137,7 +169,7 @@ class WidgetControllerTest {
   @Test
   void create() throws Exception {
     Widget newWidget = new Widget(null, 100, 150, 2, 30, 50, null);
-    Widget createdWidget = new Widget(1l, 100, 150, 2, 30, 50, ZonedDateTime.now());
+    Widget createdWidget = new Widget(1L, 100, 150, 2, 30, 50, ZonedDateTime.now());
 
     Mockito
         .when(widgetService.save( Mockito.any(Widget.class)))
@@ -183,8 +215,8 @@ class WidgetControllerTest {
 
   @Test
   void update() throws Exception{
-    Widget updatedWidget = new Widget(1l, 100, 150, 2, 30, 60, null);
-    Widget createdWidget = new Widget(1l, 100, 150, 2, 30, 60, ZonedDateTime.now());
+    Widget updatedWidget = new Widget(1L, 100, 150, 2, 30, 60, null);
+    Widget createdWidget = new Widget(1L, 100, 150, 2, 30, 60, ZonedDateTime.now());
 
     Mockito
         .when(widgetService.save( Mockito.any(Widget.class)))
@@ -214,7 +246,7 @@ class WidgetControllerTest {
 
   @Test
   void updateWithWidgetNotFoundException() throws Exception {
-    Widget widget = new Widget(50l, 100, 150, 2, 30, 50, null);
+    Widget widget = new Widget(50L, 100, 150, 2, 30, 50, null);
 
     Mockito
         .when(widgetService.save(Mockito.any(Widget.class)))
@@ -235,7 +267,7 @@ class WidgetControllerTest {
 
   @Test
   void updateWithUnexpectedException() throws Exception {
-    Widget widget = new Widget(50l, 100, 150, 2, 30, 50, null);
+    Widget widget = new Widget(50L, 100, 150, 2, 30, 50, null);
 
     Mockito
         .when(widgetService.save(Mockito.any(Widget.class)))
@@ -255,7 +287,7 @@ class WidgetControllerTest {
 
   @Test
   void deleteTest() throws Exception{
-    Long id = 1l;
+    Long id = 1L;
     mvc.perform(delete("/widgets/"+id))
                            .andExpect(status().isOk());
 

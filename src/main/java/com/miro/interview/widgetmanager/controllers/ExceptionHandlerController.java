@@ -22,7 +22,7 @@ public class ExceptionHandlerController {
   }
 
   @ExceptionHandler({IllegalArgumentException.class, JsonMappingException.class, HttpMessageNotReadableException.class})
-  public ResponseEntity<ErrorResponse> handleIBadRequstExceptions(Exception ex, WebRequest request) {
+  public ResponseEntity<ErrorResponse> handleIBadRequestExceptions(Exception ex, WebRequest request) {
     return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
   }
 
