@@ -58,6 +58,10 @@ public class DBWidgetRepository implements IWidgetRepository {
   @Transactional
   @Override
   public Widget save(Widget widget) throws WidgetNotFoundException {
+    if (widget.getZ() == null){
+      widget.setZ(Optional.ofNullable(getMaxZIndex()).map(zIndex -> zIndex + 1 ).orElse(0));
+    }
+
     if (widget.getId() != null){
       return update(widget);
     }else{
@@ -103,6 +107,11 @@ public class DBWidgetRepository implements IWidgetRepository {
   public void deleteAll() {
     widgetRepository.deleteAll();
 
+  }
+
+  @Override
+  public Integer getMaxZIndex(){
+    return widgetRepository.getMaxZIndex();
   }
 
 }

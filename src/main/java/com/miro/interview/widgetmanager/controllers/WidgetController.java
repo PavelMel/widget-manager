@@ -5,6 +5,7 @@ import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
 import com.miro.interview.widgetmanager.services.WidgetService;
 import java.util.Collection;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping(
     path = {"/widgets"},
     produces = MediaType.APPLICATION_JSON_VALUE
 )
+/**
+ * Requests handler for CRUD operation with Widgets
+ */
 public class WidgetController {
 
   private static final String DEFAULT_PAGE_SIZE = "10";
@@ -33,6 +38,7 @@ public class WidgetController {
   public WidgetController(WidgetService widgetService) {
     this.widgetService = widgetService;
   }
+
 
   @GetMapping("/{id}")
   public Widget findById(@PathVariable("id") Long id) throws WidgetNotFoundException {
@@ -62,12 +68,12 @@ public class WidgetController {
 
   @PostMapping
   @ResponseBody
-  public Widget create(@RequestBody Widget widget) throws WidgetNotFoundException {
+  public Widget create(@Valid @RequestBody Widget widget) throws WidgetNotFoundException {
     return widgetService.save(widget);
   }
 
   @PutMapping
-  public Widget update(@RequestBody Widget widget) throws WidgetNotFoundException {
+  public Widget update(@Valid @RequestBody Widget widget) throws WidgetNotFoundException {
     return widgetService.save(widget);
   }
 

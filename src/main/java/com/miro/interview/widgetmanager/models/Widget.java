@@ -6,10 +6,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
+import javax.validation.constraints.NotNull;
 
 
 @NoArgsConstructor
@@ -23,19 +24,21 @@ public class Widget {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NonNull
+  @NotNull
   private Integer x;
 
-  @NonNull
+  @NotNull
   private Integer y;
 
-  @NonNull
+  @NotNull
   private Integer z;
 
-  @NonNull
+  @NotNull
+  @Positive
   private Integer width;
 
-  @NonNull
+  @NotNull
+  @Positive
   private Integer height;
 
   private ZonedDateTime lastModificationDate;
@@ -44,7 +47,7 @@ public class Widget {
     this.z++;
   }
 
-  public void update(@NonNull Widget widget){
+  public void update(@NotNull Widget widget){
     if (widget.getX() != null){
       this.x = widget.getX();
     }

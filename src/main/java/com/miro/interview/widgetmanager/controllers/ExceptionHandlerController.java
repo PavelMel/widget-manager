@@ -8,12 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 @Slf4j
 @ControllerAdvice
+/**
+ * Exception handler
+ */
 public class ExceptionHandlerController {
 
   @ExceptionHandler({WidgetNotFoundException.class})
@@ -21,7 +25,7 @@ public class ExceptionHandlerController {
     return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler({IllegalArgumentException.class, JsonMappingException.class, HttpMessageNotReadableException.class})
+  @ExceptionHandler({IllegalArgumentException.class, JsonMappingException.class, HttpMessageNotReadableException.class, MethodArgumentNotValidException.class})
   public ResponseEntity<ErrorResponse> handleIBadRequestExceptions(Exception ex, WebRequest request) {
     return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
   }

@@ -1,5 +1,7 @@
 package com.miro.interview.widgetmanager.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 import com.miro.interview.widgetmanager.models.exceptions.WidgetNotFoundException;
@@ -29,6 +31,22 @@ class WidgetServiceTest {
 
   @MockBean
   private IWidgetRepository widgetRepository;
+
+  @Autowired
+  private ObjectMapper objectMapper;
+
+  @Test
+  void testPArse(){
+    Widget widget = new Widget(1L, 100, 150, 2, 30, 50, ZonedDateTime.now());
+    try {
+      System.out.println(objectMapper.writeValueAsString(widget));
+    } catch (JsonProcessingException e) {
+      e.printStackTrace();
+    }
+
+
+  }
+
 
   @Test
   void findById() throws WidgetNotFoundException {

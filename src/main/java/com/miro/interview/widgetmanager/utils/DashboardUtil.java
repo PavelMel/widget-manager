@@ -4,16 +4,14 @@ import com.miro.interview.widgetmanager.models.Dashboard;
 import com.miro.interview.widgetmanager.models.Widget;
 
 /**
- * Let 𝑃(𝑥,𝑦), and rectangle 𝐴(𝑥1,𝑦1),𝐵(𝑥2,𝑦2),𝐶(𝑥3,𝑦3),𝐷(𝑥4,𝑦4)
- * Calculate the sum of areas of △𝐴𝑃𝐷,△𝐷𝑃𝐶,△𝐶𝑃𝐵,△𝑃𝐵𝐴.
+ * The main idea is that having point inside rectangle we can divide rectangle in four triangle and sum their area == rectangle area
+ *
+ * If we get point 𝑃(𝑥,𝑦), and rectangle 𝐴(𝑥1,𝑦1),𝐵(𝑥2,𝑦2),𝐶(𝑥3,𝑦3),𝐷(𝑥4,𝑦4)
+ * we can calculate the sum of areas of △𝐴𝑃𝐷,△𝐷𝑃𝐶,△𝐶𝑃𝐵,△𝑃𝐵𝐴.
  *
  * If this sum is greater than the area of the rectangle, then 𝑃(𝑥,𝑦) is outside the rectangle.
- * Else if this sum is equal to the area of the rectangle (observe that this sum cannot be less than the latter),
+ * Else if this sum is equal to the area of the rectangle
  *
- * if area of any of the triangles is 0, then 𝑃(𝑥,𝑦) is on the rectangle (in fact on that line corresponding to the triangle of area=0). Observe that the equality of the sum is necessary; it is not sufficient that area=0),
- * else 𝑃(𝑥,𝑦) is is inside the rectangle.
- *
- * Acceptably this approach needs substantial amount of computation. This approach can be employed to any irregular polygon, too.
  */
 public class DashboardUtil {
 

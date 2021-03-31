@@ -26,4 +26,6 @@ public interface IWidgetRepository {
   void delete(@NonNull Long id);
 
   void deleteAll();
+
+  Integer getMaxZIndex();
 }

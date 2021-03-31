@@ -95,6 +95,9 @@ public class InMemoryWidgetRepository implements IWidgetRepository {
   public Widget save(@NonNull Widget widget) throws WidgetNotFoundException {
     writeLock.lock();
     try {
+      if (widget.getZ() == null){
+        widget.setZ(Optional.ofNullable(getMaxZIndex()).map(zIndex -> zIndex + 1 ).orElse(0));
+      }
       if (widget.getId() != null){
         return update(widget);
       }else{
@@ -166,6 +169,11 @@ public class InMemoryWidgetRepository implements IWidgetRepository {
     zIndexStorage.clear();
   }
 
+
+  @Override
+  public Integer getMaxZIndex(){
+    return zIndexStorage.lastKey();
+  }
 
 
 }

@@ -1,9 +1,10 @@
 package com.miro.interview.widgetmanager.models;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
 
 @NoArgsConstructor
@@ -11,15 +12,17 @@ import org.springframework.lang.NonNull;
 @Data
 public class Dashboard {
 
-  @NonNull
+  @NotNull
   private Integer x;
 
-  @NonNull
+  @NotNull
   private Integer y;
 
-  @NonNull
+  @NotNull
+  @Positive
   private Integer width;
 
-  @NonNull
+  @NotNull
+  @Positive
   private Integer height;
 }
